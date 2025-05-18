@@ -63,7 +63,7 @@ EduPath Finder aims to become a **smart, all-in-one platform** for students by c
 
 ```bash
 # 1. Clone this repo
-git clone https://github.com/your-username/EduPath-Finder
+git clone https://github.com/Gauravpatil1/EduPath-Finder
 
 # 2. Setup virtual environment (optional)
 python -m venv venv
