@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Top College Suggestions | EduPath</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      margin: 0;
+      padding: 20px;
+      background: #eef4f8;
+    }
+
+    h2 {
+      text-align: center;
+      color: #222;
+    }
+
+    .college-card {
+      background: white;
+      margin: 20px auto;
+      padding: 20px;
+      border-radius: 15px;
+      max-width: 800px;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    }
+
+    .college-card h3 {
+      color: #0077cc;
+      margin-bottom: 10px;
+    }
+
+    .college-card p {
+      margin: 6px 0;
+      color: #333;
+    }
+
+    .college-card a {
+      color: #0077cc;
+      text-decoration: none;
+    }
+
+    .college-card a:hover {
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+  <h2>Top College Suggestions Based on Your Profile</h2>
+  <div id="suggestions"></div>
+
+  <script>
+    const colleges = [
+      {
+        name: 'IIT Bombay',
+        location: 'Mumbai, Maharashtra',
+        cutoff: 99.87,
+        fees: '2,30,000',
+        placement: '85%',
+        courses: 'B.Tech, M.Tech, PhD',
+        ranking: 1,
+        additional_info: 'Top ranked IIT in India',
+        website: 'https://www.iitb.ac.in'
+      },
+      {
+        name: 'IIT Delhi',
+        location: 'New Delhi',
+        cutoff: 99.84,
+        fees: '2,25,000',
+        placement: '83%',
+        courses: 'B.Tech, M.Tech, PhD',
+        ranking: 2,
+        additional_info: 'Known for research and innovation',
+        website: 'https://home.iitd.ac.in'
+      },
+      {
+        name: 'IIT Madras',
+        location: 'Chennai, Tamil Nadu',
+        cutoff: 99.82,
+        fees: '2,20,000',
+        placement: '88%',
+        courses: 'B.Tech, M.Tech, PhD',
+        ranking: 3,
+        additional_info: 'Best Engineering college in India 2023',
+        website: 'https://www.iitm.ac.in'
+      },
+      {
+        name: 'NIT Trichy',
+        location: 'Tiruchirappalli, Tamil Nadu',
+        cutoff: 97.5,
+        fees: '1,60,000',
+        placement: '78%',
+        courses: 'B.Tech, M.Tech',
+        ranking: 9,
+        additional_info: 'Top NIT in South India',
+        website: 'https://www.nitt.edu'
+      },
+      {
+        name: 'BITS Pilani',
+        location: 'Pilani, Rajasthan',
+        cutoff: 92.0,
+        fees: '4,30,000',
+        placement: '82%',
+        courses: 'B.E, M.E, PhD',
+        ranking: 6,
+        additional_info: 'Private institute with great placements',
+        website: 'https://www.bits-pilani.ac.in'
+      },
+      {
+        name: 'VJTI Mumbai',
+        location: 'Mumbai, Maharashtra',
+        cutoff: 96.0,
+        fees: '85,000',
+        placement: '75%',
+        courses: 'B.Tech, M.Tech',
+        ranking: 18,
+        additional_info: 'Autonomous college under Mumbai University',
+        website: 'https://vjti.ac.in'
+      },
+      {
+        name: 'COEP Pune',
+        location: 'Pune, Maharashtra',
+        cutoff: 95.2,
+        fees: '90,000',
+        placement: '76%',
+        courses: 'B.Tech, M.Tech',
+        ranking: 16,
+        additional_info: 'One of the oldest engineering colleges in India',
+        website: 'https://www.coep.org.in'
+      },
+      {
+        name: 'IIT Kharagpur',
+        location: 'Kharagpur, West Bengal',
+        cutoff: 99.7,
+        fees: '2,30,000',
+        placement: '84%',
+        courses: 'B.Tech, M.Tech, MBA',
+        ranking: 4,
+        additional_info: 'Largest IIT campus in India',
+        website: 'https://www.iitkgp.ac.in'
+      },
+      {
+        name: 'MIT WPU Pune',
+        location: 'Pune, Maharashtra',
+        cutoff: 85.0,
+        fees: '3,10,000',
+        placement: '72%',
+        courses: 'B.Tech, MBA',
+        ranking: 35,
+        additional_info: 'Private university with good industry tie-ups',
+        website: 'https://mitwpu.edu.in'
+      },
+      {
+        name: 'IIIT Hyderabad',
+        location: 'Hyderabad, Telangana',
+        cutoff: 98.0,
+        fees: '3,00,000',
+        placement: '88%',
+        courses: 'B.Tech, M.Tech, PhD',
+        ranking: 7,
+        additional_info: 'Excellent for CSE and research',
+        website: 'https://www.iiit.ac.in'
+      },
+      {
+        name: 'ICT Mumbai',
+        location: 'Mumbai, Maharashtra',
+        cutoff: 94.0,
+        fees: '85,000',
+        placement: '80%',
+        courses: 'Chemical Engg, Pharma',
+        ranking: 11,
+        additional_info: 'Known for Chemical Engineering',
+        website: 'https://www.ictmumbai.edu.in'
+      }
+    ];
+
+    const container = document.getElementById("suggestions");
+
+    colleges.forEach((college, index) => {
+      container.innerHTML += `
+        <div class="college-card">
+          <h3>${index + 1}. ${college.name}</h3>
+          <p><strong>Location:</strong> ${college.location}</p>
+          <p><strong>Cutoff:</strong> ${college.cutoff}%</p>
+          <p><strong>Fees:</strong> ₹${college.fees} per year</p>
+          <p><strong>Placement:</strong> ${college.placement}</p>
+          <p><strong>Courses:</strong> ${college.courses}</p>
+          <p><strong>Ranking:</strong> #${college.ranking}</p>
+          <p><strong>Highlights:</strong> ${college.additional_info}</p>
+          <p><a href="${college.website}" target="_blank">Visit College Website</a></p>
+        </div>
+      `;
+    });
+  </script>
+</body>
+</html>

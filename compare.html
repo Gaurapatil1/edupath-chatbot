@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Compare Colleges | EduPath</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 20px;
+      background-color: #f9f9f9;
+    }
+    h1 {
+      text-align: center;
+    }
+    .search-box {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+    .search-box input {
+      width: 50%;
+      padding: 10px;
+      font-size: 16px;
+    }
+    .college-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 20px;
+      justify-content: center;
+    }
+    .college-card {
+      background: white;
+      border: 1px solid #ccc;
+      padding: 15px;
+      width: 300px;
+      border-radius: 10px;
+      box-shadow: 2px 2px 5px rgba(0,0,0,0.1);
+    }
+    .college-card input[type="checkbox"] {
+      margin-right: 10px;
+    }
+    .compare-button {
+      display: block;
+      margin: 30px auto;
+      padding: 10px 20px;
+      font-size: 16px;
+      background-color: #0077cc;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Compare Colleges</h1>
+  <a href="compare-result.html"></a>
+
+
+  <div class="search-box">
+    <input type="text" id="searchInput" placeholder="Search colleges..." onkeyup="filterColleges()">
+  </div>
+
+  <div class="college-list" id="collegeList">
+    <!-- College cards will be populated here -->
+  </div>
+
+  <button class="compare-button" onclick="goToComparePage()">Compare Selected Colleges</button>
+
+  <script>
+    const colleges = [
+      { id: 1, name: "IIT Bombay", location: "Mumbai", cutoff: "99.87", fees: "2.3L", placement: "85%", courses: "B.Tech, M.Tech", ranking: 1, additional_info: "Top IIT", website: "https://www.iitb.ac.in" },
+      { id: 2, name: "IIT Delhi", location: "Delhi", cutoff: "99.84", fees: "2.25L", placement: "83%", courses: "B.Tech, M.Tech", ranking: 2, additional_info: "Great research", website: "https://home.iitd.ac.in" },
+      { id: 3, name: "IIT Madras", location: "Chennai", cutoff: "99.80", fees: "2.2L", placement: "82%", courses: "B.Tech, M.Tech", ranking: 3, additional_info: "Best for CS", website: "https://www.iitm.ac.in" },
+      { id: 4, name: "NIT Trichy", location: "Trichy", cutoff: "98.76", fees: "1.5L", placement: "78%", courses: "B.Tech, M.Tech", ranking: 7, additional_info: "Top NIT", website: "https://www.nitt.edu" },
+      { id: 5, name: "BITS Pilani", location: "Pilani", cutoff: "98.9", fees: "3.0L", placement: "86%", courses: "B.E., M.E.", ranking: 5, additional_info: "Private top tier", website: "https://www.bits-pilani.ac.in" },
+      { id: 6, name: "VJTI Mumbai", location: "Mumbai", cutoff: "97.5", fees: "1.0L", placement: "75%", courses: "B.Tech, M.Tech", ranking: 11, additional_info: "State Govt Engg", website: "https://vjti.ac.in" },
+      { id: 7, name: "COEP Pune", location: "Pune", cutoff: "97.3", fees: "90K", placement: "72%", courses: "B.Tech", ranking: 12, additional_info: "Oldest Engg College", website: "https://www.coep.org.in" },
+      { id: 8, name: "IIT Kharagpur", location: "Kharagpur", cutoff: "99.70", fees: "2.2L", placement: "80%", courses: "B.Tech, M.Tech", ranking: 4, additional_info: "Largest IIT", website: "https://www.iitkgp.ac.in" },
+      { id: 9, name: "MIT WPU Pune", location: "Pune", cutoff: "93", fees: "1.5L", placement: "70%", courses: "B.Tech", ranking: 18, additional_info: "Private college", website: "https://mitwpu.edu.in" },
+      { id: 10, name: "IIIT Hyderabad", location: "Hyderabad", cutoff: "99.5", fees: "2.8L", placement: "90%", courses: "B.Tech", ranking: 6, additional_info: "Great for CS", website: "https://www.iiit.ac.in" },
+      { id: 11, name: "ICT Mumbai", location: "Mumbai", cutoff: "96", fees: "1.2L", placement: "76%", courses: "B.Tech", ranking: 13, additional_info: "Chemical focus", website: "https://www.ictmumbai.edu.in" },
+      { id: 12, name: "SRM University", location: "Chennai", cutoff: "85", fees: "2.5L", placement: "65%", courses: "B.Tech", ranking: 19, additional_info: "Private deemed", website: "https://www.srmist.edu.in" },
+      { id: 13, name: "Amity University", location: "Noida", cutoff: "82", fees: "2.4L", placement: "60%", courses: "B.Tech", ranking: 20, additional_info: "Popular private", website: "https://www.amity.edu" },
+      { id: 14, name: "VIT Vellore", location: "Vellore", cutoff: "91", fees: "1.9L", placement: "72%", courses: "B.Tech", ranking: 15, additional_info: "Well-ranked private", website: "https://vit.ac.in" },
+      { id: 15, name: "LNCT Bhopal", location: "Bhopal", cutoff: "83", fees: "90K", placement: "60%", courses: "B.Tech", ranking: 25, additional_info: "MP's top college", website: "https://lnct.ac.in" },
+      { id: 16, name: "PICT Pune", location: "Pune", cutoff: "94", fees: "1.3L", placement: "74%", courses: "B.Tech", ranking: 16, additional_info: "Private tech college", website: "https://pict.edu" },
+      { id: 17, name: "Jadavpur University", location: "Kolkata", cutoff: "96", fees: "10K", placement: "80%", courses: "B.Tech", ranking: 9, additional_info: "Top govt university", website: "https://jaduniv.edu.in" },
+      { id: 18, name: "NSUT Delhi", location: "Delhi", cutoff: "97", fees: "1.8L", placement: "78%", courses: "B.Tech", ranking: 10, additional_info: "Growing fast", website: "https://nsut.ac.in" },
+      { id: 19, name: "DTU Delhi", location: "Delhi", cutoff: "97.4", fees: "1.9L", placement: "79%", courses: "B.Tech", ranking: 8, additional_info: "Popular choice", website: "https://dtu.ac.in" },
+      { id: 20, name: "Pune Institute of CS", location: "Pune", cutoff: "90", fees: "1.2L", placement: "68%", courses: "B.Tech", ranking: 22, additional_info: "Emerging private", website: "#" }
+    ];
+
+    function populateColleges(data) {
+      const collegeList = document.getElementById('collegeList');
+      collegeList.innerHTML = '';
+      data.forEach(college => {
+        const card = document.createElement('div');
+        card.className = 'college-card';
+        card.innerHTML = `
+          <label>
+            <input type="checkbox" name="college" value="${college.id}">
+            <strong>${college.name}</strong>
+          </label>
+          <p><strong>Location:</strong> ${college.location}</p>
+          <p><strong>Cutoff:</strong> ${college.cutoff}</p>
+          <p><strong>Fees:</strong> ${college.fees}</p>
+          <p><strong>Placement:</strong> ${college.placement}</p>
+          <p><strong>Ranking:</strong> ${college.ranking}</p>
+        `;
+        collegeList.appendChild(card);
+      });
+    }
+
+    function filterColleges() {
+      const keyword = document.getElementById('searchInput').value.toLowerCase();
+      const filtered = colleges.filter(c => c.name.toLowerCase().includes(keyword));
+      populateColleges(filtered);
+    }
+
+    function goToComparePage() {
+      const selected = Array.from(document.querySelectorAll('input[name="college"]:checked'));
+      if (selected.length !== 2) {
+        alert("Please select exactly two colleges to compare.");
+        return;
+      }
+      const ids = selected.map(c => c.value);
+      window.location.href = `compare-result.html?college1=${ids[0]}&college2=${ids[1]}`;
+    }
+
+    window.onload = () => populateColleges(colleges);
+  </script>
+
+</body>
+</html>

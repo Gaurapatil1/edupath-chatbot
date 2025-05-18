@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>EduPath | College Reviews</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: #f0f4f8;
+      margin: 0;
+      padding: 0;
+    }
+
+    header {
+      background: linear-gradient(to right, #4a00e0, #0073e6);
+      color: white;
+      padding: 20px;
+      text-align: center;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: 28px;
+    }
+
+    .search-container {
+      margin: 20px auto;
+      text-align: center;
+    }
+
+    .search-container input {
+      padding: 10px;
+      width: 60%;
+      max-width: 400px;
+      border: 1px solid #ccc;
+      border-radius: 10px;
+      font-size: 16px;
+    }
+
+    .review-list {
+      max-width: 900px;
+      margin: 20px auto;
+      padding: 10px;
+    }
+
+    .review-card {
+      background: white;
+      padding: 20px;
+      margin-bottom: 15px;
+      border-radius: 15px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    }
+
+    .college-name {
+      font-size: 20px;
+      color: #003366;
+      font-weight: bold;
+    }
+
+    .rating {
+      color: #ffcc00;
+    }
+
+    .review-text {
+      margin: 10px 0;
+    }
+
+    .reviewer {
+      font-size: 14px;
+      color: #555;
+    }
+
+    @media (max-width: 600px) {
+      .search-container input {
+        width: 90%;
+      }
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <h1>College Reviews</h1>
+  <p>Real student feedback to help you decide better!</p>
+</header>
+
+<div class="search-container">
+  <input type="text" id="searchBox" placeholder="Search college by name..." onkeyup="filterReviews()">
+</div>
+
+<div class="review-list" id="reviewList">
+  <!-- Reviews will be injected here -->
+</div>
+
+<script>
+  const reviews = [
+    { college: "IIT Bombay", rating: 5, review: "Top-notch faculty and infrastructure. Great placement opportunities.", reviewer: "Aarav Sharma" },
+    { college: "COEP Pune", rating: 4, review: "Excellent campus life and good industry exposure.", reviewer: "Sneha Joshi" },
+    { college: "VJTI Mumbai", rating: 4, review: "Strong academics, decent placements, needs more modern facilities.", reviewer: "Rahul Mehta" },
+    { college: "MIT-WPU Pune", rating: 3, review: "Good private college, but expensive.", reviewer: "Priya Kulkarni" },
+    { college: "ICT Mumbai", rating: 5, review: "Great for chemical and pharma fields.", reviewer: "Neha Deshmukh" },
+    { college: "NIT Nagpur", rating: 4, review: "Underrated NIT, solid faculty and events.", reviewer: "Akshay Patil" },
+    { college: "PCCOE Pune", rating: 3, review: "Average teaching, good placements for CS/IT.", reviewer: "Rutuja Jadhav" },
+    { college: "Walchand Sangli", rating: 4, review: "Autonomous and flexible, good for serious learners.", reviewer: "Shubham Shinde" },
+    { college: "DJ Sanghvi Mumbai", rating: 4, review: "Very good for CS/IT branch.", reviewer: "Tanvi Shah" },
+    { college: "Fr. CRCE Mumbai", rating: 3, review: "Good crowd, average infra.", reviewer: "Omkar Naik" },
+    { college: "PICT Pune", rating: 5, review: "Excellent for coding culture and placements.", reviewer: "Yash Pawar" },
+    { college: "DY Patil Akurdi", rating: 3, review: "Decent option, lacks research focus.", reviewer: "Sakshi Patil" },
+    { college: "Sinhgad Vadgaon", rating: 2, review: "Overcrowded, infra needs major upgrade.", reviewer: "Harshad Jadhav" },
+    { college: "AISSMS COE", rating: 3, review: "City center location, average placements.", reviewer: "Isha Pandey" },
+    { college: "RAIT Navi Mumbai", rating: 4, review: "Strong network and consistent performance.", reviewer: "Manav Thakur" },
+    { college: "Bharati Vidyapeeth Pune", rating: 2, review: "Expensive, focus more on quantity than quality.", reviewer: "Pooja Gaikwad" },
+    { college: "SIT Pune", rating: 4, review: "Symbiosis tag and modern infra.", reviewer: "Aditya Kale" },
+    { college: "IIIT Nagpur", rating: 4, review: "New but promising, excellent coding environment.", reviewer: "Vedant More" },
+    { college: "Sandip University Nashik", rating: 3, review: "Upcoming university, improving year by year.", reviewer: "Komal Bhatt" },
+    { college: "Government College of Engineering Jalgaon", rating: 3, review: "Low fees, good faculty but infra needs work.", reviewer: "Gaurav Patil" }
+  ];
+
+  function generateStars(rating) {
+    return '★'.repeat(rating) + '☆'.repeat(5 - rating);
+  }
+
+  function displayReviews(data) {
+    const container = document.getElementById("reviewList");
+    container.innerHTML = "";
+
+    data.forEach(r => {
+      const card = document.createElement("div");
+      card.className = "review-card";
+      card.innerHTML = `
+        <div class="college-name">${r.college}</div>
+        <div class="rating">${generateStars(r.rating)}</div>
+        <div class="review-text">${r.review}</div>
+        <div class="reviewer">- ${r.reviewer}</div>
+      `;
+      container.appendChild(card);
+    });
+  }
+
+  function filterReviews() {
+    const search = document.getElementById("searchBox").value.toLowerCase();
+    const filtered = reviews.filter(r => r.college.toLowerCase().includes(search));
+    displayReviews(filtered);
+  }
+
+  // Show all reviews on load
+  displayReviews(reviews);
+</script>
+
+</body>
+</html>

@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>AI Career Suggestion | EduPath Finder</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 20px;
+      max-width: 700px;
+      margin: auto;
+      background: linear-gradient(to right, #e0f7fa, #e1f5fe);
+    }
+    h2 {
+      text-align: center;
+      margin-bottom: 25px;
+      color: #007bff;
+    }
+    label {
+      display: block;
+      margin-top: 15px;
+      font-weight: 600;
+      color: #333;
+    }
+    input, textarea, select {
+      width: 100%;
+      padding: 12px;
+      margin-top: 5px;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+      font-size: 15px;
+    }
+    button {
+      margin-top: 25px;
+      padding: 12px 20px;
+      background-color: #007bff;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-size: 16px;
+      cursor: pointer;
+      width: 100%;
+      transition: background 0.3s;
+    }
+    button:hover {
+      background-color: #0056b3;
+    }
+    #loading {
+      display: none;
+      text-align: center;
+      margin-top: 20px;
+      font-weight: bold;
+      color: #007bff;
+    }
+    #result {
+      margin-top: 30px;
+      padding: 20px;
+      background: #e3f2fd;
+      border-left: 6px solid #2196f3;
+      border-radius: 8px;
+      display: none;
+      animation: fadeIn 0.5s ease-in-out;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+  </style>
+</head>
+<body>
+
+  <h2>AI Career Suggestion (Based on Your Input)</h2>
+
+  <label for="stream">Your Stream:</label>
+  <select id="stream">
+    <option value="">-- Select your stream --</option>
+    <option value="science">Science</option>
+    <option value="commerce">Commerce</option>
+    <option value="arts">Arts</option>
+  </select>
+
+  <label for="interests">Your Interests:</label>
+  <textarea id="interests" rows="3" placeholder="e.g., AI, Machine Learning, Design, Business..."></textarea>
+
+  <label for="skills">Your Skills:</label>
+  <textarea id="skills" rows="3" placeholder="e.g., Python, Public Speaking, Photoshop, SQL..."></textarea>
+
+  <button onclick="getSuggestion()">Get Career Suggestion</button>
+
+  <div id="loading">Fetching career suggestion...</div>
+
+  <div id="result">
+    <h3>Suggested Career Path:</h3>
+    <div id="careerOutput"></div>
+  </div>
+
+  <script>
+    function getSuggestion() {
+      const stream = document.getElementById("stream").value;
+      const interests = document.getElementById("interests").value.trim();
+      const skills = document.getElementById("skills").value.trim();
+      const loading = document.getElementById("loading");
+      const resultBox = document.getElementById("result");
+      const output = document.getElementById("careerOutput");
+
+      if (!stream || !interests || !skills) {
+        alert("Please fill in all fields to get a suggestion.");
+        return;
+      }
+
+      loading.style.display = "block";
+      resultBox.style.display = "none";
+
+      setTimeout(() => {
+        loading.style.display = "none";
+        resultBox.style.display = "block";
+
+        let suggestion = "";
+
+        if (stream === "science") {
+          suggestion = `With your interest in <strong>${interests}</strong> and skills in <strong>${skills}</strong>, you can boost your career in <strong>Data Science</strong>, <strong>AI Engineering</strong>, or become a <strong>Machine Learning Developer</strong>. These fields are perfect for Science stream students like you.`;
+        } else if (stream === "commerce") {
+          suggestion = `Your interest in <strong>${interests}</strong> and skills like <strong>${skills}</strong> align well with careers in <strong>Business Intelligence</strong>, <strong>AI-powered Finance</strong>, or roles such as a <strong>Tech-savvy Entrepreneur</strong>.`;
+        } else if (stream === "arts") {
+          suggestion = `Given your interest in <strong>${interests}</strong> and creative skills like <strong>${skills}</strong>, you can explore careers in <strong>AI Design</strong>, <strong>UX Research</strong>, or <strong>AI-driven Digital Media</strong>.`;
+        } else {
+          suggestion = "Stream not recognized. Please choose a valid option.";
+        }
+
+        output.innerHTML = `<p>${suggestion}</p>`;
+      }, 1500);
+    }
+  </script>
+</body>
+</html>

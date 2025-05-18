@@ -1,0 +1,471 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Bookmarked Colleges | EduPath Finder</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      margin: 0;
+      padding: 20px;
+      background: #f5f9ff;
+    }
+
+    h2 {
+      text-align: center;
+      color: #1e3a8a;
+      margin-bottom: 10px;
+    }
+
+    .search-container {
+      max-width: 600px;
+      margin: 10px auto 30px;
+      text-align: center;
+    }
+
+    .search-container input {
+      width: 80%;
+      padding: 10px;
+      font-size: 16px;
+      border: 2px solid #d0d7e8;
+      border-radius: 8px;
+    }
+
+    .bookmarks-container {
+      max-width: 900px;
+      margin: auto;
+    }
+
+    .bookmark {
+      background: #ffffff;
+      padding: 20px;
+      margin-bottom: 20px;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+      position: relative;
+      transition: transform 0.2s;
+    }
+
+    .bookmark:hover {
+      transform: scale(1.01);
+    }
+
+    .bookmark h3 {
+      margin: 0;
+      color: #0d47a1;
+    }
+
+    .bookmark p {
+      margin: 5px 0;
+      color: #444;
+    }
+
+    .bookmark a {
+      color: #1a73e8;
+      text-decoration: none;
+    }
+
+    .bookmark a:hover {
+      text-decoration: underline;
+    }
+
+    .remove-btn {
+      position: absolute;
+      top: 15px;
+      right: 15px;
+      background: #ef4444;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      padding: 6px 12px;
+      cursor: pointer;
+      font-size: 14px;
+      transition: background 0.2s;
+    }
+
+    .remove-btn:hover {
+      background: #b91c1c;
+    }
+
+    .no-bookmarks {
+      text-align: center;
+      color: #666;
+      margin-top: 40px;
+    }
+
+    .no-bookmarks img {
+      max-width: 220px;
+      opacity: 0.7;
+    }
+
+    .add-bookmark-btn {
+      display: block;
+      margin: 10px auto 30px;
+      background: #2563eb;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 8px;
+      font-size: 16px;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+
+    .add-bookmark-btn:hover {
+      background: #1e40af;
+    }
+
+    @media (max-width: 600px) {
+      .bookmark {
+        padding: 15px;
+      }
+
+      .remove-btn {
+        top: 10px;
+        right: 10px;
+        padding: 5px 10px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <h2>Your Bookmarked Colleges</h2>
+
+  <div class="search-container">
+    <input type="text" id="searchBox" placeholder="Search by college name..." oninput="filterBookmarks()">
+  </div>
+
+  <button class="add-bookmark-btn" onclick="addcollegebyname()">+ Add </button>
+
+  <div class="bookmarks-container" id="bookmarkList"></div>
+
+  <div class="no-bookmarks" id="noBookmarks" style="display: none;">
+    <img src="https://cdn-icons-png.flaticon.com/512/4076/4076549.png" alt="No bookmarks">
+    <p>No bookmarked colleges yet.<br>Start exploring and add your favorite colleges here!</p>
+  </div>
+
+  <script>
+    let allBookmarks = [];
+
+    // Load bookmarks from localStorage
+    function loadBookmarks() {
+      const saved = localStorage.getItem("bookmarkedColleges");
+      allBookmarks = saved ? JSON.parse(saved) : [];
+      renderBookmarks(allBookmarks);
+    }
+
+    // Save bookmarks to localStorage
+    function saveBookmarks() {
+      localStorage.setItem("bookmarkedColleges", JSON.stringify(allBookmarks));
+    }
+
+    // Render bookmarks
+    function renderBookmarks(bookmarks) {
+      const container = document.getElementById("bookmarkList");
+      const noDataDiv = document.getElementById("noBookmarks");
+      container.innerHTML = "";
+
+      if (bookmarks.length === 0) {
+        noDataDiv.style.display = "block";
+        return;
+      } else {
+        noDataDiv.style.display = "none";
+      }
+
+      bookmarks.forEach((college, index) => {
+        const div = document.createElement("div");
+        div.className = "bookmark";
+        div.innerHTML = `
+          <h3>${college.name}</h3>
+          <p><strong>Location:</strong> ${college.location}</p>
+          <p><strong>Cutoff:</strong> ${college.cutoff}% | <strong>Fees:</strong> ₹${college.fees.toLocaleString()}</p>
+          <p><strong>Courses:</strong> ${college.courses}</p>
+          <p><strong>Website:</strong> <a href="${college.website}" target="_blank">${college.website}</a></p>
+          <button class="remove-btn" onclick="removeBookmark(${index})">Remove</button>
+        `;
+        container.appendChild(div);
+      });
+    }
+
+    // Filter bookmarks
+    function filterBookmarks() {
+      const query = document.getElementById("searchBox").value.toLowerCase();
+      const filtered = allBookmarks.filter(college =>
+        college.name.toLowerCase().includes(query)
+      );
+      renderBookmarks(filtered);
+    }
+
+    // Remove a bookmark
+    function removeBookmark(index) {
+      if (confirm("Are you sure you want to remove this college from bookmarks?")) {
+        allBookmarks.splice(index, 1);
+        saveBookmarks();
+        renderBookmarks(allBookmarks);
+      }
+    }
+
+    // Add dummy college (for testing/demo)
+    function addDummyBookmark() {
+      const sample = {
+        name: " Godavari Collage of engineering ",
+        location: "Jalgaon, Maharashtra",
+        cutoff: Math.floor(Math.random() * 100),
+        fees: 78000,
+        courses: "Computer Engineering, AI & DS , ENTC,Elictrical,Mechinical",
+        website: "https://www.example.com"
+      };
+      allBookmarks.push(sample);
+      saveBookmarks();
+      renderBookmarks(allBookmarks);
+    }
+
+    loadBookmarks();
+    const collegeData = [
+    {
+      name: 'IIT Bombay',
+      location: 'Mumbai, Maharashtra',
+      cutoff: '99.87',
+      fees: 230000,
+      placement: '85%',
+      courses: 'B.Tech, M.Tech, PhD',
+      ranking: '1',
+      additional_info: 'Top ranked IIT in India',
+      website: 'https://www.iitb.ac.in'
+    },
+    {
+      name: 'IIT Delhi',
+      location: 'New Delhi',
+      cutoff: '99.84',
+      fees: 225000,
+      placement: '83%',
+      courses: 'B.Tech, M.Tech, PhD',
+      ranking: '2',
+      additional_info: 'Known for research and innovation',
+      website: 'https://home.iitd.ac.in'
+    },
+    {
+      name: 'IIT Madras',
+      location: 'Chennai, Tamil Nadu',
+      cutoff: '99.82',
+      fees: 220000,
+      placement: '88%',
+      courses: 'B.Tech, M.Tech, PhD',
+      ranking: '3',
+      additional_info: 'Best Engineering college in India 2023',
+      website: 'https://www.iitm.ac.in'
+    },
+    {
+      name: 'NIT Trichy',
+      location: 'Tiruchirappalli, Tamil Nadu',
+      cutoff: '97.50',
+      fees: 160000,
+      placement: '78%',
+      courses: 'B.Tech, M.Tech',
+      ranking: '9',
+      additional_info: 'Top NIT in South India',
+      website: 'https://www.nitt.edu'
+    },
+    {
+      name: 'BITS Pilani',
+      location: 'Pilani, Rajasthan',
+      cutoff: '92.00',
+      fees: 430000,
+      placement: '82%',
+      courses: 'B.E, M.E, PhD',
+      ranking: '6',
+      additional_info: 'Private institute with great placements',
+      website: 'https://www.bits-pilani.ac.in'
+    },
+    {
+      name: 'VJTI Mumbai',
+      location: 'Mumbai, Maharashtra',
+      cutoff: '96.00',
+      fees: 85000,
+      placement: '75%',
+      courses: 'B.Tech, M.Tech',
+      ranking: '18',
+      additional_info: 'Autonomous college under Mumbai University',
+      website: 'https://vjti.ac.in'
+    },
+    {
+      name: 'COEP Pune',
+      location: 'Pune, Maharashtra',
+      cutoff: '95.20',
+      fees: 90000,
+      placement: '76%',
+      courses: 'B.Tech, M.Tech',
+      ranking: '16',
+      additional_info: 'One of the oldest engineering colleges in India',
+      website: 'https://www.coep.org.in'
+    },
+    {
+      name: 'IIT Kharagpur',
+      location: 'Kharagpur, West Bengal',
+      cutoff: '99.70',
+      fees: 230000,
+      placement: '84%',
+      courses: 'B.Tech, M.Tech, MBA',
+      ranking: '4',
+      additional_info: 'Largest IIT campus in India',
+      website: 'https://www.iitkgp.ac.in'
+    },
+    {
+      name: 'MIT WPU Pune',
+      location: 'Pune, Maharashtra',
+      cutoff: '85.00',
+      fees: 310000,
+      placement: '72%',
+      courses: 'B.Tech, MBA',
+      ranking: '35',
+      additional_info: 'Private university with good industry tie-ups',
+      website: 'https://mitwpu.edu.in'
+    },
+    {
+      name: 'IIIT Hyderabad',
+      location: 'Hyderabad, Telangana',
+      cutoff: '98.00',
+      fees: 300000,
+      placement: '88%',
+      courses: 'B.Tech, M.Tech, PhD',
+      ranking: '7',
+      additional_info: 'Excellent for CSE and research',
+      website: 'https://www.iiit.ac.in'
+    },
+    {
+      name: 'ICT Mumbai',
+      location: 'Mumbai, Maharashtra',
+      cutoff: '94.00',
+      fees: 85000,
+      placement: '80%',
+      courses: 'Chemical Engg, Pharma',
+      ranking: '11',
+      additional_info: 'Known for Chemical Engineering',
+      website: 'https://www.ictmumbai.edu.in'
+    },
+    {
+      name: 'SRM University',
+      location: 'Chennai, Tamil Nadu',
+      cutoff: '80.00',
+      fees: 250000,
+      placement: '70%',
+      courses: 'B.Tech, MBA',
+      ranking: '48',
+      additional_info: 'Private university with modern campus',
+      website: 'https://www.srmist.edu.in'
+    },
+    {
+      name: 'Manipal Institute of Technology',
+      location: 'Manipal, Karnataka',
+      cutoff: '81.00',
+      fees: 315000,
+      placement: '74%',
+      courses: 'B.Tech, M.Tech',
+      ranking: '45',
+      additional_info: 'Strong alumni base and infrastructure',
+      website: 'https://manipal.edu/mit.html'
+    },
+    {
+      name: 'Jadavpur University',
+      location: 'Kolkata, West Bengal',
+      cutoff: '92.00',
+      fees: 15000,
+      placement: '79%',
+      courses: 'B.E, M.E',
+      ranking: '12',
+      additional_info: 'Best state university for engineering',
+      website: 'http://www.jaduniv.edu.in'
+    },
+    {
+      name: 'Amrita Vishwa Vidyapeetham',
+      location: 'Coimbatore, Tamil Nadu',
+      cutoff: '87.00',
+      fees: 190000,
+      placement: '73%',
+      courses: 'B.Tech, M.Tech',
+      ranking: '21',
+      additional_info: 'Well ranked private university',
+      website: 'https://www.amrita.edu'
+    },
+    {
+      name: 'VIT Vellore',
+      location: 'Vellore, Tamil Nadu',
+      cutoff: '89.00',
+      fees: 210000,
+      placement: '75%',
+      courses: 'B.Tech, M.Tech',
+      ranking: '28',
+      additional_info: 'Top private university for tech',
+      website: 'https://vit.ac.in'
+    },
+    {
+      name: 'Delhi Technological University (DTU)',
+      location: 'Delhi',
+      cutoff: '93.00',
+      fees: 125000,
+      placement: '82%',
+      courses: 'B.Tech, M.Tech',
+      ranking: '14',
+      additional_info: 'Top government engineering college',
+      website: 'https://www.dtu.ac.in'
+    },
+    {
+      name: 'NSUT Delhi',
+      location: 'New Delhi',
+      cutoff: '91.00',
+      fees: 130000,
+      placement: '80%',
+      courses: 'B.Tech, M.Tech',
+      ranking: '15',
+      additional_info: 'Popular for CSE & ECE',
+      website: 'http://www.nsut.ac.in'
+    },
+    {
+      name: 'PES University',
+      location: 'Bengaluru, Karnataka',
+      cutoff: '83.00',
+      fees: 220000,
+      placement: '78%',
+      courses: 'B.Tech, M.Tech',
+      ranking: '37',
+      additional_info: 'Industry-focused curriculum',
+      website: 'https://www.pes.edu'
+    },
+    {
+      name: 'Shiv Nadar University',
+      location: 'Greater Noida, UP',
+      cutoff: '82.00',
+      fees: 275000,
+      placement: '76%',
+      courses: 'B.Tech, MBA',
+      ranking: '39',
+      additional_info: 'Emerging private university',
+      website: 'https://www.snu.edu.in'
+    }
+  ];
+
+  function addCollegeByName() {
+    const query = document.getElementById("searchBox").value.trim().toLowerCase();
+    const found = collegeData.find(c => c.name.toLowerCase().includes(query));
+    if (!found) {
+      alert("College not found in database.");
+      return;
+    }
+
+    const alreadyBookmarked = allBookmarks.some(c => c.name.toLowerCase() === found.name.toLowerCase());
+    if (alreadyBookmarked) {
+      alert("College is already bookmarked.");
+      return;
+    }
+
+    allBookmarks.push(found);
+    saveBookmarks();
+    renderBookmarks(allBookmarks);
+    alert("College added to bookmarks!");
+  } 
+  </script>
+
+</body>
+</html>

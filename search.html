@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>EduPath | College Predictor</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #74ebd5, #acb6e5);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+    }
+
+    .form-container {
+      background: white;
+      padding: 30px;
+      border-radius: 20px;
+      width: 90%;
+      max-width: 550px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+      text-align: center;
+    }
+
+    h2 {
+      color: #333;
+      margin-bottom: 20px;
+    }
+
+    input, select {
+      width: 100%;
+      padding: 12px;
+      margin: 10px 0;
+      border: 1px solid #ccc;
+      border-radius: 10px;
+      font-size: 16px;
+    }
+
+    button {
+      width: 100%;
+      padding: 14px;
+      border: none;
+      background: #0077cc;
+      color: white;
+      font-size: 16px;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: background 0.3s ease;
+    }
+
+    button:hover {
+      background: #005fa3;
+    }
+
+    .college-results {
+      margin-top: 20px;
+      text-align: left;
+    }
+
+    .college-card {
+      background: #f0f8ff;
+      padding: 15px;
+      border-radius: 12px;
+      margin-bottom: 15px;
+      box-shadow: 0 5px 10px rgba(0,0,0,0.1);
+    }
+
+    .college-card h4 {
+      color: #0077cc;
+      margin: 0 0 5px 0;
+    }
+
+    .college-card p {
+      margin: 4px 0;
+    }
+  </style>
+</head>
+<body>
+  <div class="form-container">
+    <h2>EduPath College Predictor</h2>
+
+    <input type="text" id="name" placeholder="Enter your Name" />
+    <input type="number" id="marks12" placeholder="12th Marks (%)" />
+    
+    <select id="examType">
+      <option value="">Select Exam</option>
+      <option value="CET">MHT-CET</option>
+      <option value="JEE">JEE</option>
+    </select>
+
+    <input type="number" id="examScore" placeholder="Enter your MHT-CET/JEE Score" />
+    <input type="text" id="location" placeholder="Preferred College Location" />
+
+    <button id="predictBtn">Get College Suggestions</button>
+
+    <div id="suggestions" class="college-results"></div>
+  </div>
+
+  <script>
+    document.getElementById('predictBtn').addEventListener('click', function () {
+      const name = document.getElementById('name').value.trim();
+      const marks12 = parseFloat(document.getElementById('marks12').value);
+      const examType = document.getElementById('examType').value;
+      const examScore = parseFloat(document.getElementById('examScore').value);
+      const location = document.getElementById('location').value.trim();
+  
+      if (!name || isNaN(marks12) || !examType || isNaN(examScore) || !location) {
+        alert("Please fill all fields correctly.");
+        return;
+      }
+  
+      // Store form data in sessionStorage
+      sessionStorage.setItem("userData", JSON.stringify({
+        name, marks12, examType, examScore, location
+      }));
+  
+      // Redirect to results page
+      window.location.href = "results.html";
+    });
+  </script>
+</body>
+</html>
