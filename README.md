@@ -3,7 +3,7 @@
 
 [![Technologies](https://img.shields.io/badge/Built%20With-HTML%2FCSS%2FJS%20%7C%20Python%20%7C%20MySQL-blue?style=for-the-badge)]()  
 [![Status](https://img.shields.io/badge/Version-1.0--Stable-brightgreen?style=for-the-badge)]()  
-[![Chatbot](https://img.shields.io/badge/Chatbot-Coming%20Soon-orange?style=for-the-badge)]()
+[![Chatbot](https://img.shields.io/badge/Chatbot-Working(MySQL)%20Soon-orange?style=for-the-badge)]()
 
 
 ## ✨ About the Project
